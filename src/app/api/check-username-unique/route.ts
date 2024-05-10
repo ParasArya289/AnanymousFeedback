@@ -1,10 +1,11 @@
 import { usernameValidation } from "@/Schemas/signupSchema.schema";
 import dbConnect from "@/lib/dbConnect";
+import UserModel from "@/model/User.model";
 import { z } from "zod";
 
 const UsernameValidationSchema = z.object({
-    username:usernameValidation
-})
+  username: usernameValidation,
+});
 
 export async function GET(request: Request) {
   await dbConnect();
@@ -14,7 +15,42 @@ export async function GET(request: Request) {
       username: searchParams.get("username"),
     };
     //validate with Zod
-    UsernameValidationSchema.safeParse(queryParams.username);
+    const result = UsernameValidationSchema.safeParse(queryParams);
+
+    if (!result.success) {
+      const usernameErrors = result.error.format().username?._errors || [];
+      return Response.json(
+        {
+          success: false,
+          message:
+            usernameErrors?.length > 0
+              ? usernameErrors.join(",")
+              : "Invalid query parameter",
+        },
+        { status: 400 }
+      );
+    }
+    const { username } = result.data;
+    const existingVerifiedUser = await UserModel.findOne({
+      username,
+      isVerified: true,
+    });
+    if (existingVerifiedUser) {
+      return Response.json(
+        {
+          success: false,
+          message: "Username is already taken",
+        },
+        { status: 400 }
+      );
+    }
+    return Response.json(
+      {
+        success: true,
+        message: "Username is available",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error checking Username", error);
     return Response.json(
