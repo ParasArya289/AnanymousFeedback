@@ -59,30 +59,30 @@ export async function POST(request: Request) {
         isAcceptingMessage: true,
         messages: [],
       });
-      
+      await newUser.save();
       //send verification email
-      const emailResponse = await sendVerificationEmail(
-        email,
-        username,
-        verifyCode
-      );
-      if (!emailResponse.success) {
-        return Response.json(
-          {
-            success: false,
-            message: emailResponse.message,
-          },
-          { status: 500 }
-        );
-      }
+    }
+    const emailResponse = await sendVerificationEmail(
+      email,
+      username,
+      verifyCode
+    );
+    if (!emailResponse.success) {
       return Response.json(
         {
-          success: true,
-          message: "User registered successfully. Please verify your email",
+          success: false,
+          message: emailResponse.message,
         },
-        { status: 201 }
+        { status: 500 }
       );
     }
+    return Response.json(
+      {
+        success: true,
+        message: "User registered successfully. Please verify your email",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.log("Error registering user", error);
     return Response.json(
