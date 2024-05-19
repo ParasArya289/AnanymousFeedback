@@ -54,10 +54,13 @@ export async function POST(request: Request) {
       username: usernameFromZod,
     });
     if (!user) {
-      return Response.json({
-        success: false,
-        message: "User not found with this username.",
-      });
+      return Response.json(
+        {
+          success: false,
+          message: "User not found with this username.",
+        },
+        { status: 401 }
+      );
     }
     const isCodeValid = user.verifyCode === codeFromZod;
     const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
@@ -91,7 +94,7 @@ export async function POST(request: Request) {
       );
     }
   } catch (error) {
-    console.error("Error verifying user",error);
+    console.error("Error verifying user", error);
     return Response.json(
       {
         success: false,
