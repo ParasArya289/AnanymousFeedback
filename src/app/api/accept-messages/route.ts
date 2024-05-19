@@ -86,7 +86,7 @@ export async function GET(request: Request) {
         message: "Successfull fetched message acceptance status.",
         isAcceptingMessage: foundUser?.isAcceptingMessage,
       },
-      { status: 404 }
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error fetching message acceptance status.", error);
