@@ -26,7 +26,7 @@ const page = () => {
     resolver: zodResolver(acceptMessageSchema),
   });
   const { register, watch, setValue } = form;
-  const acceptMessages = watch("acceptMessage");
+  const acceptMessage = watch("acceptMessage");
 
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId));
@@ -84,9 +84,9 @@ const page = () => {
   const handleSwitchChange = async () => {
     try {
       const response = await axios.post<ApiResponse>("/api/accept-messages", {
-        isAcceptingMessage: !acceptMessages,
+        isAcceptingMessage: !acceptMessage,
       });
-      setValue("acceptMessage", !acceptMessages);
+      setValue("acceptMessage", !acceptMessage);
       toast("Status changed", { description: response.data.message });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
@@ -132,15 +132,15 @@ const page = () => {
           <Label htmlFor="accept-message">Accept Messages</Label>
           <Switch
             {...register("acceptMessage")}
-            checked={acceptMessages}
+            checked={acceptMessage}
             onCheckedChange={handleSwitchChange}
             disabled={isSwitchLoading}
             id="accept-message"
           />
         </div>
 
-        {/* <span className="mb-4">
-          Accept Messages:{acceptMessages ? "On" : "Off"}
+        {/* <span className="mb-4"> 
+          Accept Messages:{acceptMessage ? "On" : "Off"}
         </span> */}
       </div>
       <Separator />
