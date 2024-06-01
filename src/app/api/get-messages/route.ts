@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     }
 
     return Response.json(
-      { messages: user },
+      { messages: user.messages },
       {
         status: 200,
       }
