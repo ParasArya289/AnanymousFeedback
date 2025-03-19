@@ -15,13 +15,15 @@ import { ApiResponse } from "@/types/apiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
 const page = () => {
   const { username } = useParams<{ username: string }>();
+  const [messages, setMessages] = useState<Array<string>>();
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
   });
@@ -41,6 +43,27 @@ const page = () => {
       toast("Error", {
         description: errorMessage,
       });
+    }
+  };
+  const suggestMessageHandler = async () => {
+    try {
+      const response = await axios.post("/api/suggest-message");
+      setMessages(response.data.message.split(" | | "));
+      toast("Message Suggested");
+    } catch (error) {
+      console.error("Error suggesting message");
+      const axiosError = error as AxiosError<ApiResponse>;
+      let errorMessage =
+        axiosError.response?.data.message ?? "Error suggesting message";
+      toast("Error", {
+        description: errorMessage,
+      });
+    }
+  };
+  const setMessageRefHandler = (message: string) => {
+    if (messageRef.current) {
+      messageRef.current.value = message;
+      messageRef.current.focus();
     }
   };
   return (
@@ -66,6 +89,7 @@ const page = () => {
                   <Textarea
                     placeholder="Message"
                     {...field}
+                    ref={messageRef}
                     onChange={(e) => {
                       field.onChange(e);
                     }}
@@ -81,6 +105,16 @@ const page = () => {
           </Button>
         </form>
       </Form>
+      <Button onClick={suggestMessageHandler}>Suggest Message</Button>
+      {messages?.map((message, i) => (
+        <div
+          onClick={() => setMessageRefHandler(message)}
+          key={i}
+          className="cursor-pointer"
+        >
+          {message}
+        </div>
+      ))}
     </div>
   );
 };
