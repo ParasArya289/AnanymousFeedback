@@ -64,6 +64,7 @@ const page = () => {
     if (messageRef.current) {
       messageRef.current.value = message;
       messageRef.current.focus();
+      form.setValue('content', message);
     }
   };
   return (
