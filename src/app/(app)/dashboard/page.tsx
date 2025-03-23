@@ -99,7 +99,11 @@ const page = () => {
   };
 
   if (!session || !session.user) {
-    return <div>Please Login to continue</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <div className="text-xl">Please Login to continue</div>
+      </div>
+    );
   }
   const { username } = session?.user as User;
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -111,7 +115,7 @@ const page = () => {
   };
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-background rounded w-full max-w-6xl">
+    <div className="md:mx-2 lg:mx-auto p-6 bg-background rounded w-full max-w-6xl">
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link </h2>
