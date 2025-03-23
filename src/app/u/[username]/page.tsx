@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApiResponse } from "@/types/apiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -23,6 +24,7 @@ import * as z from "zod";
 const page = () => {
   const { username } = useParams<{ username: string }>();
   const [messages, setMessages] = useState<Array<string>>();
+  const [isLoading, setIsLoading] = useState(false);
   const messageRef = useRef<HTMLTextAreaElement>(null);
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -46,6 +48,7 @@ const page = () => {
     }
   };
   const suggestMessageHandler = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post("/api/suggest-message");
       setMessages(response.data.message.split(" | | "));
@@ -58,64 +61,76 @@ const page = () => {
       toast("Error", {
         description: errorMessage,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
   const setMessageRefHandler = (message: string) => {
     if (messageRef.current) {
       messageRef.current.value = message;
       messageRef.current.focus();
-      form.setValue('content', message);
+      form.setValue("content", message);
     }
   };
   return (
-    <div>
-      <h1>Public Profile Link</h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Send anonymous message to @{username}</FormLabel>
-                <FormControl>
-                  {/* <Input
-                    placeholder="Message"
-                    type="text"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
-                  /> */}
-                  <Textarea
-                    placeholder="Message"
-                    {...field}
-                    ref={messageRef}
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage className="text-xs font-normal" />
-              </FormItem>
-            )}
-          />
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-[800px] space-y-8">
+        <h1 className="text-2xl font-bold text-center">Public Profile Link</h1>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Send anonymous message to @{username}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Message"
+                      {...field}
+                      ref={messageRef}
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs font-normal" />
+                </FormItem>
+              )}
+            />
 
-          <Button type="submit" disabled={false}>
-            Send
+            <Button type="submit" disabled={false} className="w-full">
+              Send
+            </Button>
+          </form>
+        </Form>
+        <div className="space-y-4">
+          <Button
+            onClick={suggestMessageHandler}
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                Suggesting <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+              </>
+            ) : (
+              "Suggest Message"
+            )}
           </Button>
-        </form>
-      </Form>
-      <Button onClick={suggestMessageHandler}>Suggest Message</Button>
-      {messages?.map((message, i) => (
-        <div
-          onClick={() => setMessageRefHandler(message)}
-          key={i}
-          className="cursor-pointer"
-        >
-          {message}
+          <div className="space-y-2">
+            {messages?.map((message, i) => (
+              <div
+                onClick={() => setMessageRefHandler(message)}
+                key={i}
+                className="cursor-pointer p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 text-center"
+              >
+                {message}
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 };
