@@ -1,0 +1,53 @@
+[
+    {
+      "title": "Message from user123",
+      "content": "Hey, you free to chat?",
+      "received": "10 mins ago"
+    },
+    {
+      "title": "Message from user456",
+      "content": "Just saw your post, totally relatable!",
+      "received": "1 hour ago"
+    },
+    {
+      "title": "Message from user789",
+      "content": "Wanna join our game lobby?",
+      "received": "2 hours ago"
+    },
+    {
+      "title": "Message from user321",
+      "content": "That meme you shared had me laughing so hard!",
+      "received": "4 hours ago"
+    },
+    {
+      "title": "Message from user654",
+      "content": "Thanks for the advice, it really helped!",
+      "received": "7 hours ago"
+    },
+    {
+      "title": "Message from user987",
+      "content": "Are you still up? Couldn't sleep either.",
+      "received": "12 hours ago"
+    },
+    {
+      "title": "Message from user111",
+      "content": "Hope you're doing okay. Let me know if you wanna talk.",
+      "received": "1 day ago"
+    },
+    {
+      "title": "Message from user222",
+      "content": "Yo, we should catch up sometime soon!",
+      "received": "2 days ago"
+    },
+    {
+      "title": "Message from user333",
+      "content": "That playlist you shared is fire. Got any more?",
+      "received": "3 days ago"
+    },
+    {
+      "title": "Message from user444",
+      "content": "Sorry for the late reply, things have been hectic lately.",
+      "received": "5 days ago"
+    }
+  ]
+  
