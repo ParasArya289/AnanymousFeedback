@@ -24,17 +24,22 @@ export async function GET(request: Request) {
       { $match: { _id: userId } },
       { $unwind: "$messages" },
       { $sort: { "messages.createdAt": -1 } },
-      { $group: { 
-        _id: "$_id", 
-        messages: { $push: "$messages" } 
-      }}
+      {
+        $group: {
+          _id: "$_id",
+          messages: { $push: "$messages" },
+        },
+      },
     ]);
-
-    if (!user || user.length === 0) {
+    if (!user) {
       return Response.json(
         { message: "User not found", success: false },
         { status: 404 }
       );
+    }
+
+    if (user.length === 0) {
+      throw new Error("No messages found");
     }
 
     return Response.json(
@@ -45,6 +50,12 @@ export async function GET(request: Request) {
     );
   } catch (error) {
     console.error("An unexpected error occurred:", error);
+    if (error instanceof Error && error.message === "No messages found") {
+      return Response.json(
+        { message: "No messages found", success: false },
+        { status: 404 }
+      );
+    }
     return Response.json(
       { message: "Internal server error", success: false },
       { status: 500 }
