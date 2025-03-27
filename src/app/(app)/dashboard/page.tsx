@@ -181,17 +181,15 @@ const DashboardPage = () => {
       )}
 
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.length > 0 ? (
-          messages.map((message) => (
-            <MessageCard
-              key={message._id}
-              message={message}
-              onMessageDelete={handleDeleteMessage}
-            />
-          ))
-        ) : (
-          <p>No message to display.</p>
-        )}
+        {messages.length > 0 && !isLoading
+          ? messages.map((message) => (
+              <MessageCard
+                key={message._id}
+                message={message}
+                onMessageDelete={handleDeleteMessage}
+              />
+            ))
+          : !isLoading && <p>No message to display.</p>}
       </div>
     </div>
   );
