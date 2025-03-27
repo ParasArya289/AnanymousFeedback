@@ -27,7 +27,7 @@ export default function Home() {
         </p>
       </section>
       <Carousel
-        plugins={[Autoplay({ delay: 1000 })]}
+        plugins={[Autoplay({ delay: 2000 })]}
         className="w-full max-w-xs"
       >
         <CarouselContent>
