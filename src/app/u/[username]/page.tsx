@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const page = () => {
+const UniqueProfilePage = () => {
   const { username } = useParams<{ username: string }>();
   const [messages, setMessages] = useState<Array<string>>();
   const [isLoading, setIsLoading] = useState(false);
@@ -135,4 +135,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default UniqueProfilePage;

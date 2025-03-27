@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/Schemas/signinSchema.schema";
 import { signIn } from "next-auth/react";
 
-const page = () => {
+const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -132,4 +132,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignIn;

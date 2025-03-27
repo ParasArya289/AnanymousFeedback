@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const page = () => {
+const DashboardPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setSwitchIsLoading] = useState(false);
@@ -179,4 +179,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DashboardPage;

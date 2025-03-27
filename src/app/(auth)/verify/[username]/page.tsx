@@ -37,7 +37,7 @@ const VerifyAccount = () => {
         code: data.code,
       });
       toast("Success", { description: response.data.message });
-      router.replace("sign-in");
+      router.replace("/sign-in");
     } catch (error) {
       console.log("Error in verification of user");
       const axiosError = error as AxiosError<ApiResponse>;
@@ -51,11 +51,11 @@ const VerifyAccount = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
       <div className="w-full max-w-md p-8 space-y-8 bg-background rounded-lg shadow-sm border flex flex-col justify-center items-center">
-            <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight lg:text-4xl mb-3">
-                Verify your account
-            </h1>
-            </div>
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-4xl mb-3">
+            Verify your account
+          </h1>
+        </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
