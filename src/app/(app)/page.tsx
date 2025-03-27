@@ -28,7 +28,7 @@ export default function Home() {
       </section>
       <Carousel
         plugins={[Autoplay({ delay: 2000 })]}
-        className="w-full max-w-xs"
+        className="max-w-xs md:max-w-xl"
       >
         <CarouselContent>
           {messages.map((message, index) => (
