@@ -48,7 +48,7 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProp) => {
   };
 
   return (
-    <Card className="flex items-start justify-between py-4">
+    <Card className="flex items-start justify-between py-4 relative">
       <CardHeader>
         <CardTitle>{message.content}</CardTitle>
         <CardDescription>
@@ -57,8 +57,11 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProp) => {
       </CardHeader>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="ghost" className="mr-6 mt-6">
-            <X className="w-5 h-5" />
+          <Button
+            variant="ghost"
+            className="mr-6 mt-6 absolute top-0 right-0 translate-x-5 -translate-y-5"
+          >
+            <X className="w-5 h-5 text-red-600" />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
@@ -71,7 +74,10 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProp) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm}>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700"
+            >
               Continue
             </AlertDialogAction>
           </AlertDialogFooter>
