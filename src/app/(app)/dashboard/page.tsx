@@ -16,6 +16,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const DashboardPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -51,15 +52,18 @@ const DashboardPage = () => {
   const fetchMessages = useCallback(
     async (refresh: boolean = false) => {
       setIsLoading(true);
-      // setSwitchIsLoading(false);
       try {
-        const response = await axios.get<ApiResponse>("/api/get-messages");
-        setMessages(response.data?.messages ?? []);
-        if (refresh) {
-          toast("Refreshed Message", {
-            description: "Showing latest messages",
-          });
-        }
+        await Promise.all([
+          new Promise((resolve) => setTimeout(resolve, 500)),
+          axios.get<ApiResponse>("/api/get-messages").then((response) => {
+            setMessages(response.data?.messages ?? []);
+            if (refresh) {
+              toast("Refreshed Message", {
+                description: "Showing latest messages",
+              });
+            }
+          }),
+        ]);
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
         toast("Error", {
@@ -162,6 +166,20 @@ const DashboardPage = () => {
           <RefreshCcw className="h-4 w-4 " />
         )}
       </Button>
+      {isLoading && (
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Array.from({ length: messages.length || 4 }).map((_, index) => (
+            <div className="flex flex-col space-y-3">
+              <Skeleton className="h-[150px] w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
           messages.map((message) => (
