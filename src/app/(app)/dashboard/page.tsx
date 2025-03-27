@@ -169,7 +169,7 @@ const DashboardPage = () => {
       {isLoading && (
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
           {Array.from({ length: messages.length || 4 }).map((_, index) => (
-            <div className="flex flex-col space-y-3">
+            <div key={index} className="flex flex-col space-y-3">
               <Skeleton className="h-[150px] w-full rounded-xl" />
               <div className="space-y-2">
                 <Skeleton className="h-4 w-[250px]" />
